@@ -1,0 +1,15 @@
+{
+  "name": "promised",
+  "version": "0.0.0",
+  "description": "example of working with promises",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD",
+  "dependencies": {
+    "q": "~0.9.7",
+    "sqlite3": "~2.1.17"
+  }
+}
