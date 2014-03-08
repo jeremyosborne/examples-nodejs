@@ -1,0 +1,18 @@
+{
+    "name": "wgetter",
+    "description": "a commandline wget like tool for node",
+    "version": "0.0.1",
+    "author": {
+        "name": "Jeremy Osborne",
+        "email": "jeremywosborne@gmail.com",
+        "url": "http://jeremyosborne.com/"
+    },
+    "main": "wgetter.js",
+    "engines": {
+        "node": ">= 0.6.x"
+    },
+    "dependencies": {
+        "request": "2.12.x",
+        "async": "0.1.x"
+    }
+}
