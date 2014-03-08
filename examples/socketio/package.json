@@ -1,0 +1,19 @@
+{
+    "name": "Echo",
+    "version": "0.0.1",
+    "description": "Echo with websockets",
+    "author": {
+        "name": "Jeremy Osborne",
+        "email": "jeremywosborne@gmail.com"
+    },
+    "engines": {
+        "node": ">= 0.6.0",
+        "npm": ">= 1.0.0"
+    },
+    "dependencies": {
+        "socket.io": "0.9.x",
+        "express": "3.x"
+    },
+    "private": true,
+    "main": "server.js"
+}

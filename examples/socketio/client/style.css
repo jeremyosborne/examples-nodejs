@@ -1,0 +1,72 @@
+body, html {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: monospace;
+    font-size: 1.5em;
+}
+header > h1 {
+    text-align: right;
+    padding: 1em;
+    margin: 0;
+    background-color: #888;
+    color: white;
+}
+body > section {
+    width: 80%;
+    margin: 0 auto;
+}
+#status {
+    width: 50em;
+    outline: none;
+    transition: all 0.5s linear;
+}
+#status:invalid {
+    border: 5px solid #bf3030;
+    /* for mozilla */
+    box-shadow: 0 0 0 transparent;
+}
+#status:valid {
+    border: 5px solid #269926;
+}
+.message {
+    padding: 0.5em;
+    margin: 0.5em auto;
+    background-color: white;
+
+    border-radius: 0.5em;
+    box-shadow: 2px 2px 1px #dcc;
+
+    -webkit-animation: appear 0.5s linear;
+    animation: appear 0.5s linear;
+}
+.connect.message {
+    background-color: black;
+    color: white;
+    background-image: none;
+}
+.disconnect.message {
+    background-color: black;
+    color: white;
+    background-image: none;
+}
+.sent.message {
+    color: blue;
+}
+.response.message {
+    color: purple;
+}
+.error.message {
+    color: red;
+}
+
+@-webkit-keyframes appear {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes appear {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

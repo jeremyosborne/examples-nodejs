@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8" />
+        <title>Socket.io Echo</title>
+        <script src="socket.io/socket.io.js"></script>
+        <link href="/style.css" rel="stylesheet"/>
+        <script src="/code.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.js"></script>
+        <script type="text/x-handlebars-templates" id="message-template">
+<div class="message {{#if status}}{{status}}{{/if}}">
+    {{#if userId}}(user #{{userId}}) {{/if}}{{message}}
+</div>
+        </script>
+    </head>
+    <body>
+        <header>
+            <h1>Socket.io Echo</h1>
+        </header>
+        <section>
+            <p>Type a message and hit return to echo to server.</p>
+
+            <form action="javascript:void(0)">
+                <input type="text" id="status" required autofocus placeholder="type message here"/>
+                <button id="disconnect" type="button">disconnect</button>
+            </form>
+            <div id="output"></div>
+        </section>
+    </body>
+</html>
