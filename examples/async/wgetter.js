@@ -68,6 +68,8 @@ else {
     var processList = process.argv.slice(2).map(function(url) {
         return processFactory(url);
     });
-    async.parallel(processList);
+    async.parallel(processList, function(err) {
+        console.log("All tasks done.");
+    });
 }
 
