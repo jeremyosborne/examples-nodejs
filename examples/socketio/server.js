@@ -1,5 +1,3 @@
-
-
 var express = require('express');
 var app = express();
 // Document root has some smarts, like serving index.html to root path.

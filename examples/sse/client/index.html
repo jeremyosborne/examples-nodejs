@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Server-sent events</title>
+        <link href="style.css" rel="stylesheet"/>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
+        <script src="code.js"></script>
+        <script id="price-list-template" type="text/x-handlebars-template">
+{{#each prices}}
+<li><span class="{{change}}"></span>{{price}}</li>
+{{/each}}
+        </script>
+    </head>
+    <body>
+        <header>
+            <h1>Emulated stock updates via Server-sent events</h1>
+        </header>
+        <section id="updates">
+            <h1><span id="updates-active" class="no"></span> Updates</h1>
+            <ul></ul>
+        </section>
+        <canvas id="price-chart" width="1000" height="1000"></canvas>
+    </body>
+</html>

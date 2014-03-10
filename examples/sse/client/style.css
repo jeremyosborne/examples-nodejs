@@ -1,0 +1,75 @@
+body, html {
+    padding: 0;
+    margin: 0;
+}
+
+header h1 {
+    margin: 0;
+    background-color: #ccc;
+    padding: 1em;
+    text-align: right;
+    font-family: sans-serif;
+    vertical-align: middle;
+}
+#updates-active {
+    display: inline-block;
+    height: 0.5em;
+    width: 0.5em;
+    -moz-transition: all 0.5s linear;
+    -o-transition: all 0.5s linear;
+    -webkit-transition: all 0.5s linear;
+    transition: all 1s linear;
+}
+#updates-active.no {
+    background-color: red;
+}
+#updates-active.yes {
+    background-color: #33FF00;
+}
+
+#price-chart {
+    border: 1px solid black;
+}
+
+#updates {
+    width: 10em;
+    float: left;
+}
+#updates h1 {
+    margin: 0;
+    padding: 0.2em;
+    text-align: center;
+    background-color: black;
+    color: white;
+    font-family: sans-serif;
+}
+#updates ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+#updates ul li {
+    padding: 0.3em;
+}
+#updates ul li:nth-child(even) {
+    background-color: #ccc;
+}
+
+#updates ul li span {
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    margin-right: 1em;
+    text-align: center;
+}
+#updates ul li span.even:after {
+    content: "-";
+}
+#updates ul li span.up:after {
+    content: "\25b2";
+    color: #33FF00;
+}
+#updates ul li span.down:after {
+    content: "\25bc";
+    color: red;
+}
