@@ -1,0 +1,34 @@
+<div id="{{mojit_view_id}}">
+    {{! 
+        We ship our template down with our view for use on the 
+        client side. The fact the type is not "text/javascript" or some
+        other javascript valid content type will cause the script to
+        be ignored and remain invisible in the page.
+        
+        We do not build the visual templates on the server side, we
+        let the client side do that.
+    }}
+    <script class="alarm-template" type="text/x-handlebars-template">
+    {{!
+        We use the HTML5 data- attribute to store the ms since the epoch
+        with each alarm.
+        
+        Also, from here we have a problem. We want to send back a handlebars
+        template that gets processed as a Handlebars template. How can we
+        get around the inevitable processing of expressions?
+        
+        NOTE: RIGHT NOW WE DON'T
+        
+        Handlebars has a bug with escaping tags, and this bug is propagated
+        in the YUI release of handlebars. As such, we send down a template
+        that will be processed by the Y.substitue module.
+        
+        See for bug info:
+        https://github.com/wycats/handlebars.js/issues/232
+    }}
+<div class="alarm-clock" data-ms-since-epoch="{msSinceEpoch}">
+    <span class="minutes">{minutes}</span>:<span class="seconds">{seconds}</span>
+    <span class="message">{message}</span>
+</div>
+    </script>
+</div>

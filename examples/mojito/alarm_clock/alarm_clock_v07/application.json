@@ -1,0 +1,38 @@
+[
+    {
+        "settings": ["master"],
+        "specs": {
+            "api": {
+                "type": "alarmAPI",
+                "config": {
+                    "deploy": true
+                }
+            },
+            "frame": {
+                "type": "HTMLFrameMojit",
+                "config": {
+                    "deploy": true,
+                    "title": "Alarm Clocks",
+                    "child": {
+                        "type": "alarmContainer",
+                        "config": {
+                            "children": {
+                                "alarmInput": {
+                                    "type": "alarmInput"
+                                },
+                                "alarmDisplay": {
+                                    "type": "alarmDisplay"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }, {
+        "settings": ["environment:development"],
+        "staticHandling": {
+            "forceUpdate": true
+        }
+    }
+] 

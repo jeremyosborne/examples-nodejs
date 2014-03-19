@@ -1,0 +1,22 @@
+.alarm-clock {
+    width: 80%;
+    margin: 1em auto;
+    color: #034769;
+    background-color: #63ADD0;
+    font-size: 400%;
+    font-family: monospace;
+    padding: 0.3em;
+    border-radius: 0.3em;
+    box-shadow: 3px 3px 1px #ccc;
+}
+
+.alarm-clock span {
+    vertical-align: middle;
+}
+
+.alarm-clock .message {
+    font-size: 30%;
+    font-family: sans-serif;
+    color: #6c3a00;
+    text-align: right;
+}

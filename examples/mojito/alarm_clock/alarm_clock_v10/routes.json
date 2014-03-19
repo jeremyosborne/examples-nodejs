@@ -1,0 +1,25 @@
+[
+    {
+        "settings": ["master"],
+        "alarmAPI get": {
+            "verbs": ["get"],
+            "path": "/get",
+            "call": "api.get"
+        },
+        "alarmAPI set": {
+            "verbs": ["get"],
+            "path": "/set",
+            "call": "api.set"
+        },
+        "alarmAPI delete": {
+            "verbs": ["get"],
+            "path": "/del",
+            "call": "api.del"
+        },
+        "alarmClock entrypoint": {
+            "verbs": ["get"],
+            "path": "/",
+            "call": "frame.index"
+        }
+    }
+]

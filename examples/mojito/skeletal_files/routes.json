@@ -1,0 +1,42 @@
+// !!!! NOTE: REMOVE ALL COMMENTS BEFORE USING !!!!
+// The route.json file is parsed as JSON, and JSON does not allow
+// comments. This file is designed to be an instructional file. If you do
+// use this file, you must remove all comments from the file (and configure
+// to work with your own application and mojits).
+
+// {Array} -> The root object of this JSON file is an array that contains
+// multiple configuration objects.
+[
+    // {Object} -> Configuration Object.
+    // There is a hierarchical level of configuration, with the master config
+    // providing the basic settings that all run levels will default to.
+    {
+        // {String[]} -> Context of configuration, master is the default.
+        "settings": ["master"],
+        // {Object} -> A configuration of a specific route. The name for
+        // this configuration is completely arbitrary, and can be used for
+        // documentation and logging purposes.
+        // Each specific route must have its own separate configuration.
+        "newsReader entrypoint": {
+            // {String[]} -> Array of HTTP request types that can be serviced
+            // by this route. Possible values: get, post.
+            "verbs": ["get"],
+            // {String} -> A (possibly) parameterized string that is used
+            // to match incoming request URL paths. The most significant match
+            // wins.
+            "path": "/",
+            // {String} -> Which action of which instance of a Mojit to call? 
+            // The names here correspond to the spec names defined in the
+            // application.json file. The action maps to a method defined
+            // on the mojit instance.
+            // As a side note, the HTMLFrameMojit, and other composit mojits,
+            // will (often) forward on the action to their child mojit.s
+            "call": "frame.index"
+        },
+        "latestStory API": {
+            "verbs": ["get"],
+            "path": "/latestStory",
+            "call": "latestStory.latestStory"
+        }
+    }
+]

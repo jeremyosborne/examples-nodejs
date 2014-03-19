@@ -1,0 +1,53 @@
+/* Warning, the box-sizing does not work for IE6 or IE7, but for now
+ * let's just pretend we don't care about them ever again. */
+* { 
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; 
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+
+    font-family: Helvetica, Verdana, sans-serif;
+    color: #0E0A56;
+}
+
+header h1 {
+    margin: 0 0 1em 0;
+    text-align: right;
+    color: #7c6006;
+    background-color: #dfc570;
+    padding: 1em;
+}
+
+/* We have so many layers of divs because they are needed by mojito. */
+.mojit-page-container {
+    /* We need this sizing to make sure we fill the full page. */
+    height: 100%;
+}
+
+/* These control the general layout of the page. */
+.mojit-layout-container {
+    width: 50%;
+    height: 100%;
+    overflow: auto;
+    float: left;
+}
+
+
+
+/* A bit of responsive design. When the page shrinks below a small view
+ * flip to a single column view. */
+@media screen and (max-width: 768px) {
+    .mojit-layout-container {
+        /* Adjust the height a bit. */
+        height: 70%;
+        /* Single column. */
+        width: 100%;
+        float: none;
+        /* Add a tiny amount of space below each container. */
+        margin-bottom: 1em;
+    }
+}

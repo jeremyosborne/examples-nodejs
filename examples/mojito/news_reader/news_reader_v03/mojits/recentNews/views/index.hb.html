@@ -1,0 +1,47 @@
+<div id="{{mojit_view_id}}" class="recent-news-articles">
+    {{! This is a handlebars comment. 
+        Handlebars is an extended superset, and is supported as part of YUI.
+        Block helpers in handlebars are prefaced with a # in the opening
+        of the moustache, and are closed with a / closing tag.
+        Our if block will execute what is inside if the length property of
+        the article property is not falsey.
+        Otherwise our else block will execute.
+    }}
+    {{#if articles.length}}
+    <header>
+        <h1>There are {{articles.length}} top stories today.</h1>
+    </header>
+    <section class="article-container">
+        {{! The each block will iterate over an array of content.
+            When inside of the each block, the reference point to the content
+            shifts to each item being iterated over.
+            That's why we use "title" instead of "article[i].title".
+            Content can be placed anywhere in a template.
+        }}
+        {{#each articles}}
+        <article>
+            <header>
+                <hgroup>
+                    <h1><a href="{{link}}" target="_blank">{{title}}</a></h1>
+                    <h2>{{pubDate}}, <a href="{{source.url}}">{{source.content}}</a></h2>
+                </hgroup>
+            </header>
+            <section>
+                {{! Handlebars by default renders all text as escaped HTML.
+                    The content of our article is delivered as html, and
+                    we want it to render as HTML.
+                    There are two methods for rending unescaped HTML:
+                        - Using a triple moustache instead of a double (not shown).
+                        - Using a double moustache plus an ampersand (shown).
+                }}
+                {{&description}}
+            </section>
+        </article>
+        {{/each}}
+    </section>
+    {{else}}
+    <header>
+        <h1>No top stories today.</h1>
+    </header>
+    {{/if}}
+</div>

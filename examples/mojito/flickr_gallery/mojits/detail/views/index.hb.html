@@ -1,0 +1,14 @@
+<div id="{{mojit_view_id}}" class="detail">
+    <h2>Details</h2>
+    <ul>
+    {{#unless err}}
+        <li><strong>Image Details</strong></li>
+        {{#with detail}}
+        {{#if title}}<li>Title: {{{title}}}</li>{{/if}}
+        {{#if description}}<li>Description: {{{description}}}</li>{{/if}}
+        {{#if owner.realname}}<li>Owner: {{{owner.realname}}}</li>{{/if}}
+        {{#if owner.location}}<li>Location: {{{owner.location}}}</li>{{/if}}
+        {{/with}}
+    {{/unless}}
+    </ul>
+</div>

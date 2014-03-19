@@ -1,0 +1,32 @@
+[
+    {
+        "settings": ["master"],
+        "specs": {
+            "frame": {
+                "type": "HTMLFrameMojit",
+                "config": {
+                    "deploy": true,
+                    "title": "News Reader",
+                    "child": {
+                        "type": "newsContainer",
+                        "config": {
+                            "children": {
+                                "newStories": {
+                                    "type": "newStories"
+                                },
+                                "recentNews": {
+                                    "type": "recentNews"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }, {
+        "settings": ["environment:development"],
+        "staticHandling": {
+            "forceUpdate": true
+        }
+    }
+] 

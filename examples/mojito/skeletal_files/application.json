@@ -1,0 +1,117 @@
+// !!!! NOTE: REMOVE ALL COMMENTS BEFORE USING !!!!
+// The application.json file is parsed as JSON, and JSON does not allow
+// comments. This file is designed to be an instructional file. If you do
+// use this file, you must remove all comments from the file (and configure
+// to work with your own application and mojits).
+
+// {Array} -> The root object of this JSON file is an array that contains
+// multiple configuration objects.
+[
+    // {Object} -> Configuration Object.
+    // There is a hierarchical level of configuration, with the master config
+    // providing the basic settings that all run levels will default to.
+    {
+        // {String[]} -> Context of configuration, master is the default.
+        "settings": ["master"],
+        // {Number} -> Which port Mojito will listen on. Default 8666.
+        "appPort": 8666,
+        // {Object} -> Object used to configure logging output.
+        "log": {
+            // {Object} -> There can be one client configuration, which 
+            // controls logging on the client.
+            "client": {
+                // {String} -> Which log level to include in the output
+                // on the client/server? Default is INFO.
+                // Valid values: DEBUG, INFO, WARN, ERROR, MOJITO
+                "level": "WARN"
+            },
+            // {Object} -> There can be one server configuration, which 
+            // controls logging on the server.
+            "server": {
+                "level": "WARN",
+                // {Boolean} -> Should YUI generated log messages appear in
+                // the server log output? Default is true.
+                "yui": false
+            }
+        },
+        // {Object} -> YUI specific configuration.
+        "yui": {
+            // {String[]} -> Names of modules that we wish to load into the
+            // client side, whether or not they are required by the code.
+            "extraModules": [],
+            // {Boolean} -> Whether or not to show the YUI DOM based logging
+            // console in the client (likely you will never set this to
+            // true).
+            "showConsoleInClient": false,
+            // {Object} -> Basic configuration that is passed to each YUI
+            // instance. For configuration information, see the YUI docs.
+            "config": {
+                "fetchCSS": false,
+                "combine": true
+            }
+        },
+        // {Object} -> The specs object acts as an associative array of
+        // mojit definitions.
+        "specs": {
+            // {Object} -> Each spec is itself a configuration object.
+            // The name of the spec (here frame) is used to reference this
+            // object in other contexts (like in the routes.json file).
+            // The name itself is arbitrary, and we can name things as we
+            // like.
+            "frame": {
+                // {String} -> The type ties this spec to an already defined
+                // mojit, either one we have made or a predefined one.
+                // The examples in this code make use of the pre-existing
+                // HTMLFrameMojit that provides basic scaffolding for the
+                // page, and also makes sure that certain things just work
+                // in the examples.
+                "type": "HTMLFrameMojit",
+                // {Object} -> Each mojit is configurable. The config object
+                // is made available to each mojit.
+                "config": {
+                    // {Boolean} -> Whether or not this mojit will deploy client
+                    // code (like binders and client side controllers).
+                    "deploy": true,
+                    // {String} -> HTMLFrameMojits can have the html title
+                    // configured here. This does not necessarily affect
+                    // any other mojits by default.
+                    "title": "News Reader",
+                    // {Object} -> HTMLFrameMojits have a single child that
+                    // needs to be populated. Often this will point to a
+                    // container mojit. The object itself is a mojit spec.
+                    "child": {
+                        "type": "news",
+                        "config": {
+                            // {Object} -> Any mojit can have a children
+                            // definition, thus making it a composite mojit.
+                            // Mojits defined inside of the child definition
+                            // can be managed by the parent. In effect, this
+                            // is an associative array of mojit specs. 
+                            "children": {
+                                "newStories": {
+                                    "type": "stories"
+                                },
+                                "recentNews": {
+                                    "type": "recent"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }, 
+    {
+        // {String[]} -> Context configuation. A default mojito start command
+        // will run in development mode.
+        "settings": ["environment:development"],
+        // {Object} -> Configuration for various static assets associated
+        // with our application.
+        "staticHandling": {
+            // {Boolean} -> If true, no Cache-Control/Last-Modified headers
+            // will be sent and static assets will be retrieved each time.
+            // If false, the HTTP cache control headers will be sent.
+            "forceUpdate": true
+        }
+    }
+] 

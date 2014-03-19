@@ -1,0 +1,17 @@
+.detail h2 {
+    text-align: center;
+    background-color: #333;
+    color: white;
+    padding: 0.5em;
+}
+.detail ul {
+    list-style: none;
+    padding: 1em;
+    margin: 0;
+}
+.detail li {
+    padding: 0.3em;
+}
+.detail li:nth-child(odd) {
+    background-color: #ddd;
+}

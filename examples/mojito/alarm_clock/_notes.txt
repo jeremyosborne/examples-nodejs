@@ -1,0 +1,372 @@
+ALARM CLOCK - WALKTHROUGH
+=========================
+* Exercise designed and tested with:
+    * mojito 0.5.6
+        * previous versions were tested with mojito 0.4.3, 0.4.5
+    * nodejs 0.8.8
+* Overview instructions are found in this file.
+* Each step of the application is given a trailing version number and
+  a new folder.
+* Obvious comments are used to denote where code is added, changed, or 
+  removed, EXCEPT in json files that do not allow comments (pay attention to 
+  the notes in this file for JSON file changes).
+
+
+
+alarm_clock_v01
+===============
+* Use the mojito commandline tools to create our starting application:
+
+    $ mojito create app alarm_clock
+
+* Open:
+    
+    alarm_clock/application.json
+
+  and fix as noted in the notes file.
+
+* Open:
+
+    alarm_clock/routes.json
+  
+  and fix as noted in the notes file.
+
+* Run the following command:
+
+    $ cd alarm_clock
+    $ mojito create mojit alarmContainer
+  
+* Open:
+
+    alarm_clock/mojits/alarmContainer/controller.server.js
+    
+  and make the changes to the file.
+
+* Open:
+
+    alarm_clock/mojits/alarmContainer/views/index.hb.html
+    
+  and make the changes to the file.
+
+* Run the following command:
+
+    $ cd alarm_clock
+    $ mojito create mojit alarmInput
+    
+* Open:
+
+    alarm_clock/mojits/alarmInput/controller.server.js
+    
+  and make the changes to the file.
+
+* Open:
+
+    alarm_clock/mojits/alarmInput/views/index.hb.html
+    
+  and make the changes to the file.
+
+* Run the following command:
+
+    $ cd alarm_clock
+    $ mojito create mojit alarmDisplay
+
+* Open:
+
+    alarm_clock/mojits/alarmDisplay/controller.server.js
+
+  and make the changes to the file.
+
+* Open:
+
+    alarm_clock/mojits/alarmDisplay/views/index.hb.html
+    
+  and make the changes to the file.
+
+* Run the server. Make sure you see a very simple and basically empty page
+  that shows the two test mojits on the page.
+
+
+
+alarm_clock_v02
+===============
+* Time to setup a user input form to input timers.
+
+* Open:
+
+    alarm_clock/mojits/alarmInput/views/index.hb.html
+    
+  and make the changes to the file.
+
+* Open:
+
+    alarm_clock/mojits/alarmInput/assets/index.css
+  
+  and make the changes to the file.
+
+* Test to make sure the page shows up correctly with a form.
+
+
+
+alarm_clock_v03
+===============
+* We're going to setup a web service that allows getting of previously set
+  alarms, setting of new alarms, and clearing (deleting) of expired alarms.
+
+* Create a mojit for our API endpoint:
+
+    $ cd alarm_clock
+    $ mojito create mojit alarmAPI
+
+* Register the alarm api in:
+
+    alarm_clock/application.json
+ 
+  and make the changes to the file (in diff format):
+  
+[
+    {
+        "settings": ["master"],
+        "specs": {
++           "api": {
++              "type": "alarmAPI",
++               "config": {
++                   "deploy": true
++               }
++           },
+            "frame": {
+
+* Register the routes to the alarm api in:
+
+    alarm_clock/routes.json
+
+  and make the changes to the file (in diff format):
+
+[
+    {
+        "settings": ["master"],
++       "alarmAPI get": {
++           "verbs": ["get"],
++           "path": "/get",
++           "call": "api.get"
++       },
++       "alarmAPI set": {
++           "verbs": ["get"],
++           "path": "/set",
++           "call": "api.set"
++       },
++       "alarmAPI delete": {
++           "verbs": ["get"],
++           "path": "/del",
++           "call": "api.del"
++       },
+        "alarmClock entrypoint": {
+
+* Open:
+
+    alarm_clock/mojits/alarmAPI/controller.server.js
+  
+  and make the noted changes.
+
+* Test out the new api through the browser address bar. 
+  NOTE: In real life, we'd probably only service POST requests for the
+  set and del APIs, but we want to be able to test our code without too
+  much pain.
+
+
+
+alarm_clock_v04
+===============
+* We need a place to store our alarms. We're going to keep things simple and
+  cache our alarms in a flat file, and we will serialize our alarms in and out
+  of a JSON object.
+
+* To make our lives easier, let's create our db file at:
+
+    alarm_clock/cache.json
+
+  Open up the file and place an empty object (e.g. {} ) in the file.
+
+* Let's perform a quick test with some debug code to make sure we can
+  read this file. Open:
+  
+    alarm_clock/mojits/alarmAPI/controller.server.js
+  
+  and make the DEBUG changes to the file.
+
+* After testing things out and making sure they work, time to move on to
+  our models.
+
+
+
+alarm_clock_v05
+===============
+* First data api is the easiest: the get. It's essentially copying and pasting
+  the code we just ran into the model code.
+
+* Copy:
+
+    alarm_clock/mojits/alarmAPI/models/foo.server.js
+  
+  to:
+  
+    alarm_clock/mojits/alarmAPI/models/alarms.server.js
+
+  and make the changes found in the notes.
+
+* Test out the changes by going to the url:
+
+    http://localhost:8666/get
+
+  and make sure everything works.
+
+
+
+alarm_clock_v06
+===============
+* The second data api: set. Allow our uses to save alarms.
+
+* Open:
+
+    alarm_clock/mojits/alarmAPI/models/alarms.server.js
+
+  and make the changes found in the file.
+
+* Open:
+
+    alarm_clock/mojits/alarmAPI/controller.server.js
+    
+  and make the changes found in the file.
+  REMEMBER to add the 'mojito-params-addon' requirement.
+
+* Once fixed up, perform a simple browser test with a succession of these
+  two calls:
+  
+    http://localhost:8666/set?time=10000&message=hello
+    http://localhost:8666/get
+
+  When a get is performed, we should see the hello message within the alarms
+  output.
+
+
+
+alarm_clock_v07
+===============
+* The third data api: del. Allow our uses to get rid of alarms.
+
+* Open:
+
+    alarm_clock/mojits/alarmAPI/models/alarms.server.js
+
+  and make the changes found in the file.
+
+* Open:
+
+    alarm_clock/mojits/alarmAPI/controller.server.js
+    
+  and make the changes found in the file.
+
+* Once the changes have been made, test the new code with this set of URLs:
+
+    http://localhost:8666/set?message=hello&time=10000
+    http://localhost:8666/get
+    http://localhost:8666/del?message=hello
+    http://localhost:8666/get
+
+  Make sure on the last get that we get back an empty data object.
+
+
+
+alarm_clock_v08
+===============
+* Time to start tying everything together. First, hook the form up to the
+  set api.
+
+* Open
+
+    alarm_clock/mojits/alarmInput/binders/index.js
+    
+  and make the changes in the notes.
+
+* Load up the main page at:
+
+    localhost:8666/
+    
+  and try out the form. Watch the console.log for information and the
+  cache.json file can be checked to confirm the alarms are being saved.
+
+
+
+alarm_clock_v09
+===============
+* Time to display our existing alarms.
+
+* Open:
+
+    alarm_clock/mojits/alarmDisplay/views/index.hb.html
+    
+  and make the changes noted.
+
+* Open:
+
+    alarm_clock/mojits/alarmDisplay/assets/index.css
+    
+  and make the changes noted.
+
+* Open:
+
+    alarm_clock/mojits/alarmDisplay/binders/index.js
+    
+  and make the changes noted.
+  
+
+
+alarm_clock_v10
+===============
+* Time to animate our existing alarms.
+
+* Open:
+
+    alarm_clock/mojits/alarmDisplay/binders/index.js
+    
+  and make the changes noted.
+
+* Test the code. Make sure the alarms are counting down.
+
+
+
+alarm_clock_v11
+===============
+* When an alarm expires, trigger an alert and delete the alarm from our
+  list of alarms, while refreshing the page.
+
+* Open:
+
+    alarm_clock/mojits/alarmDisplay/binders/index.js
+    
+  and make the changes noted.
+
+* Test and make sure the alarm gets triggered and deleted.
+
+* We need to make one last change: add some publisher/subscriber goodness in
+  so that when we add a new todo item we can refresh the alarm display.
+
+
+
+alarm_clock_v12
+===============
+* One final change in our code: have alarmInput publish an update event
+  when we update an alarm, and have alarmDisplay listen for that event.
+
+* Open:
+
+    alarm_clock/mojits/alarmInput/binders/index.js
+
+  and make the changes noted.
+
+* Open:
+
+    alarm_clock/mojits/alarmDisplay/binders/index.js
+
+  and make the changes noted.
+
+* Test and enjoy. You are done. You are accomplished.

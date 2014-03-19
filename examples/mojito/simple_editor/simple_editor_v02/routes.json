@@ -1,0 +1,10 @@
+[
+    {
+        "settings": ["master"],
+        "editor entrypoint": {
+            "verbs": ["get"],
+            "path": "/",
+            "call": "frame.index"
+        }
+    }
+]

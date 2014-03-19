@@ -1,0 +1,49 @@
+[
+    {
+        "settings": [ "master" ],
+        "appPort": "8666",
+        "specs": {
+            "frame": {
+                "type": "HTMLFrameMojit",
+                "config": {
+                    "deploy": true,
+                    "title": "flickr gallery",
+                    "assets": {
+                        "top": {
+                            "blob": [
+                                "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"
+                            ],
+                            "css": [
+                                "/static/flickr_gallery/assets/reset.css"
+                            ]
+                        }
+                    },
+                    "child": {
+                        "type": "composite",
+                        "config": {
+                            "header": "flickr gallery",
+                            "children": {
+                                "gallery": {
+                                    "type": "gallery"
+                                },
+                                "detail": {
+                                    "type": "detail"
+                                },
+                                "comment": {
+                                    "type": "comment",
+                                    "defer": true
+                                }
+                            } 
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "settings": [ "environment:development" ], 
+        "staticHandling": {
+            "forceUpdate": true
+        }
+    }
+]

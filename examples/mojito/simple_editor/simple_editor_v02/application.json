@@ -1,0 +1,32 @@
+[
+    {
+        "settings": ["master"],
+        "specs": {
+            "frame": {
+                "type": "HTMLFrameMojit",
+                "config": {
+                    "deploy": true,
+                    "title": "Simple HTML Editor",
+                    "child": {
+                        "type": "container",
+                        "config": {
+                            "children": {
+                                "htmlEditor": {
+                                    "type": "htmlEditor"
+                                },
+                                "htmlPreview": {
+                                    "type": "htmlPreview"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }, {
+        "settings": ["environment:development"],
+        "staticHandling": {
+            "forceUpdate": true
+        }
+    }
+]

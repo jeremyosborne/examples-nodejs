@@ -1,0 +1,30 @@
+HELLO MY NAME IS LAB - WALKTHROUGH
+==================================
+* Exercise designed and tested with:
+    * mojito 0.5.6
+        * previous versions were tested with mojito 0.4.5
+    * node.js 0.8.8
+* Overview instructions are found in this file.
+* Obvious comments are used to denote where code is added, changed, or 
+  removed, EXCEPT in json files that do not allow comments (pay attention to 
+  the notes in this file for JSON file changes).
+* Remove this file from the distributed file packages.
+
+
+
+STEPS FOR THE LAB
+=================
+* The steps for the lab are contained in "steps.txt".
+* The steps.txt file is sterile, and assumes that the instructor knows, along
+  with the completed files, enough to get through this step. This lab is
+  designed to force nothing new on the students, but to give them the chance
+  to go through and work with Mojito on their own.
+
+
+
+NOTES ABOUT DEPLOYMENT
+======================
+* Once again, the finished version of this lab is purposefully not easily
+  deployable because the error thrown by the default package.json is easier
+  to begin debugging compared to a more correct, but conflicting, 
+  package.json.

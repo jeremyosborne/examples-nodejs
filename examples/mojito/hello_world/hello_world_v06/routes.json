@@ -1,0 +1,10 @@
+[
+    {
+        "settings": ["master"],
+        "getTime entrypoint": {
+            "verbs": ["get"],
+            "path": "/",
+            "call": "frame.serverTime"
+        }
+    }
+]

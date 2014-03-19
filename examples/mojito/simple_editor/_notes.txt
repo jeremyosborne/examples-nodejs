@@ -1,0 +1,218 @@
+SIMPLE HTML EDITOR - WALKTHROUGH
+=========================
+* Exercise designed and tested with:
+    * mojito 0.5.6
+        * previous versions were tested with mojito 0.4.5
+    * nodejs 0.8.8
+* Overview instructions are found in this file.
+* Each step of the application is given a trailing version number and
+  a new folder.
+* Obvious comments are used to denote where code is added, changed, or 
+  removed, EXCEPT in json files that do not allow comments (pay attention to 
+  the notes in this file for JSON file changes).
+
+
+
+simple_editor_v01
+=================
+* The purpose of this example is to demonstrate cross-mojit communication.
+  Mojito communication implements a publisher-subscriber mechanism in the
+  same vein as YUI custom events.
+  We will be making an extremely simple HTML editor.
+* Use the mojito commandline tools to create our starting application:
+
+        mojito create app simple_editor
+        cd simple_editor
+        # The parent of our mojits.
+        mojito create mojit container
+        # The following two mojits are contained and will communicate with
+        # each other.
+        mojito create mojit htmlEditor
+        mojito create mojit htmlPreview
+
+* Open the file:
+    
+    simple_editor/application.json
+
+  and fix it as follows:
+
+[
+    {
+        "settings": ["master"],
+        "specs": {
+            "frame": {
+                "type": "HTMLFrameMojit",
+                "config": {
+                    "deploy": true,
+                    "title": "Simple HTML Editor",
+                    "child": {
+                        "type": "container",
+                        "config": {
+                            "children": {
+                                "htmlEditor": {
+                                    "type": "htmlEditor"
+                                },
+                                "htmlPreview": {
+                                    "type": "htmlPreview"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }, {
+        "settings": ["environment:development"],
+        "staticHandling": {
+            "forceUpdate": true
+        }
+    }
+] 
+
+
+* Open the file:
+    
+    simple_editor/routes.json
+
+  and place the following contents into this file:
+
+[
+    {
+        "settings": ["master"],
+        "editor entrypoint": {
+            "verbs": ["get"],
+            "path": "/",
+            "call": "frame.index"
+        }
+    }
+]
+
+* Start the mojito server and test at our regular URL:
+    
+    http://localhost:8666/
+
+* We should see the default display that we saw in our previous example. This
+  is what we want. A good sign that things are working is that the default
+  binders work (mouse over the dt tags and see the yellow highlight on the dd
+  tags).
+
+
+
+simple_editor_v02
+=================
+* Let's setup the scaffolding for all of our pages.
+
+* container mojit:
+    * Modify controller.server.js
+    * Modify views/index.hb.html
+* htmlEditor mojit:
+    * Modify controller.server.js
+    * Modify views/index.hb.html
+* htmlPreview mojit:
+    * Modify controller.server.js
+    * Modify views/index.hb.html
+
+* Start the mojito server and test at our regular URL to make sure the
+  modified scaffolding works.
+
+
+
+simple_editor_v03
+=================
+* We want to publish changed content events from the editor, and we want to
+  subscribe to the events from the preview window. We will use the binders
+  and the mojitproxy to enable this.
+
+* htmlEditor mojit:
+    * Modify binders/index.js
+
+* htmlPreview mojit:
+    * Modify binders/index.js
+
+* Test test test! Make sure everything works.
+
+
+
+simple_editor_v04
+=================
+* Let's clean up the view a bit. We'll use a bit of media query fun to switch
+  to a single column layout when the browser width gets too small.
+
+* container mojit (this will get most of the styling):
+    * assets/index.css
+* htmlEditor mojit:
+    * assets/index.css
+* htmlPreview mojit:
+    * assets/index.css
+    
+
+
+simple_editor_v05
+=================
+* We've been passing some configuration data to the HTMLFrameMojit. Let's pass
+  some data to our own mojit.
+
+* container mojit, modify:
+    * controller.server.js
+    * views/index.hb.html
+
+* Open up the application.json file and, using diff notation, make the
+  following change:
+  
+                "type": "HTMLFrameMojit",
+                "config": {
+                    "deploy": true,
+                    "title": "Simple HTML Editor",                    
+                    "child": {
+                        "type": "container",
+                        "config": {
++                           "header": "the super simple editor",
+                            "children": {
+
+* Test and make sure that we can get configuration values in our code.
+
+
+
+simple_editor_v06
+=================
+* !!!!!BROKEN
+  
+  Still cannot get shaker up and working even after upgrading mojito to 0.5.6.
+  The docs online are conflicting, and I think I'll just wait until things
+  are working and things have settled down.
+  
+  UNTIL THIS GETS RESOLVED
+  the finished version points to v05, not v06.
+  
+  And when talking about this, just wave hands at shaker.
+  
+  BROKEN!!!!!
+  
+
+* This application has various assets scattered around. Time to use Shaker
+  to roll things up.
+
+* Install mojito shaker locally:
+
+    ynpm install mojito-shaker
+    # We need to link to get it to work
+    cd ./node_modules/mojito-shaker/
+    sudo ynpm link
+    cd ../..
+
+* We need to reconfigure application.json, this time using another
+  configuration parameter to allow for multiple mojits directories to exist.
+  Diff format:
+
+        "settings": ["master"],
++       "mojitsDirs": ["mojits","node_modules/mojito-shaker/mojits"],
+        "specs": {
+            "frame": {
+!               "type": "ShakerHTMLFrameMojit",
+                "config": {
+
+* Then call, from the app root directory:
+
+        mojito-shake
+
+* Start mojito and visit your page.

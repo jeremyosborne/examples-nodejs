@@ -1,0 +1,306 @@
+HELLO WORLD - WALKTHROUGH
+=========================
+* Exercise designed and tested with:
+    * mojito 0.5.6
+        * previous versions were tested with mojito 0.4.2, 0.4.3, 0.4.5
+    * nodejs 0.6.6 and 0.8.8
+* Overview instructions are found in this file.
+* Each step of the application is given a trailing version number and
+  a new folder.
+* Obvious comments are used to denote where code is added, changed, or 
+  removed, EXCEPT in json files that do not allow comments (pay attention to 
+  the notes in this file for JSON file changes).
+
+
+
+hello_world_v01
+===============
+* Use the mojito commandline tools to create our starting application:
+        $ mojito create app hello_world
+        $ cd hello_world
+        $ mojito create mojit getTime
+* Test out the sample application as is:
+        # NOTE: always call mojito start from the hello_world root, not
+        # from inside of a mojit folder.
+        $ cd hello_world
+        $ mojito start
+* Open up a browser and go to the following address to test things:
+        http://localhost:8666/@getTime/index
+* Review the page through the debugger to see what mojito sends to the
+  browser.
+* This is not the standard way to use mojito.
+* The application produced by the generator is also incomplete, and we'll get
+  back to why that is in a future example (needs a full HTML page to include
+  client side JavaScript and styles.)
+
+
+
+hello_world_v02
+===============
+* One of the first steps is to give our basic web service a framework to
+  work in. This is one way of putting together a web based application (vs.
+  just building a web api, which is easy to build with mojito).
+* Open up
+
+    hello_world/application.json
+
+  And change the contents (i.e. the "specs" object) to the following:
+
+[
+    {
+        "settings": ["master"],
+        "specs": {
+            "frame": {
+                "type": "HTMLFrameMojit",
+                "config": {
+                    "deploy": true,
+                    "child": {
+                        "type": "getTime"
+                    }
+                }
+            }
+        }
+    }, {
+        "settings": ["environment:development"],
+        "staticHandling": {
+            "forceUpdate": true
+        }
+    }
+] 
+
+* This first change sets up a page container which we can place our mojits
+  inside of, and our page container is the canonical HTMLFrameMojit. See
+  notes on HTMLFrameMojit at:
+  
+    http://developer.yahoo.com/cocktails/mojito/docs/topics/mojito_framework_mojits.html#htmlframemojit
+
+* Vocabulary: Frame is not the same as an HTML frameset, it just happens to 
+  be an (unfortunate) choice of words used to mean "web page container".
+* Without some sort of page container, or Frame, Mojito cannot inject client
+  side JavaScript or CSS into our page.
+* Another key thing we did was set the deploy attribute of our "frame" to
+  true, which allows mojito to publish client side code (like binders).
+* The next change we want to make is to the following file:
+    
+    hello_world/routes.json
+
+  And place the following contents into this file:
+
+[
+    {
+        "settings": ["master"],
+        "getTime entrypoint": {
+            "verbs": ["get"],
+            "path": "/",
+            "call": "frame.index"
+        }
+    }
+]
+
+  The label "getTime entrypoint" is arbitrary and for our own documentation
+  purposes.
+  
+  With routes.json, we are telling the mojito server to: 
+      * handle HTTP GET requests to the root path 
+      * and forward them to our HTMLFrameMojit container (named as such in 
+        our application.json as a potential app end point)
+      * call the index method if it exists on the frame controller
+      * and forward the http request to any mojit that has an index method
+        on its controller
+* Restart the mojito server and go to our much easier to remember url:
+    
+    http://localhost:8666/
+
+* Have the participants look at how the DOM view of the page is different now
+  than our previous tests. The HTMLFrameMojit allows us to inject our CSS and
+  our binders (more on that later) into the page automagically. (This can
+  be seen by mousing over the "status" and "data" elements.)
+
+
+
+hello_world_v03
+===============
+* Time to add our own request handlers to our own getTime mojit controller.
+* Open the following code in a text editor:
+
+    hello_world/mojits/getTime/controller.server.js
+
+* Add the code as found in this version of the the application notes.
+* Open up the following code:
+    
+    hello_world/routes.json
+
+  and lets redirect the requests from our "index" handlers to our new
+  "serverTime handlers as follows":
+
+[
+    {
+        "settings": ["master"],
+        "getTime entrypoint": {
+            "verbs": ["get"],
+            "path": "/",
+            // BEGIN CODE CHANGE (don't put comments in the actual JSON file)
+            "call": "frame.serverTime"
+            // END CODE CHANGE (don't put comments in the actual JSON file)
+        }
+    }
+]
+
+* The HTMLFrameMojit will forward all of our basic requests now to the
+  serverTime method on our mojit controller instead of our index method.
+* Controllers are responsible for catching the HTTP request and calling
+  any other methods needed to handle the request.
+* Restart the server and make sure things work (as in we see the new server
+  time output).
+
+
+
+hello_world_v04
+===============
+* Using our controller to build our HTML templates is sub-optimal, and
+  collapses the MVC paradigm. Instead, we want to (where possible) have our
+  application code speak only in data, and have the final rendering into HTML
+  happen in a template.
+* Create a new file at the following location:
+
+    hello_world/mojits/getTime/views/serverTime.hb.html
+
+* Populate the file with the contents of the file with the same name located
+  in this folder version of the application.
+* Note the name of the file. This file is by default mapped to the controller 
+  action method of the same name.
+* The "hb" stands for "handlebars". Handlebars is a templating engine that
+  is supported by YUI and is a superset of Moustache. If you already know
+  Moustache, you know basically all you need to know to get you started with
+  Handlebars.
+* Now we need to go back to our controller to make use of our new template
+  view:
+  
+    hello_world/mojits/getTime/controller.server.js
+        
+* Change the serverTime function as noted in the file.
+* Restart the server, refresh the page. If all goes correctly, our page should
+  not look any different, which is what we want. All we did was take the
+  HTML out of our controller and put it in a template where it belongs.
+
+
+
+hello_world_v05
+===============
+* The model of data that our application uses should be defined outside of
+  the controller. We're going to make our own simple data model for this 
+  application.
+* Mojito created a basic data model for us when the application was created.
+  We're going to use that file format, but we're going to do so in another
+  file.
+  Copy the following file:
+  
+    hello_world/mojits/getTime/models/foo.server.js
+        
+  to:
+  
+    hello_world/mojits/getTime/models/time.server.js
+
+* The naming convention for our model file is {model_name}.{affinity}.js, 
+  where {model_name} is the name we use to refer to our model in mojit,
+  and where {affinity} can be common, server, or client.
+* Open up the file and make the changes as commented on in the model file.
+* Go back to:
+
+    hello_world/mojits/getTime/controller.server.js
+        
+* Make the changes in our serverTime method as listed in the file.
+* NOTE: To lighten the load, mojito is forcing mojits to be more explicit
+  in their requires statements. We need to require
+  
+        'mojito-models-addon'
+    
+  or we will no longer have access to our models. However, in my experience,
+  despite what the docs say, we don't seem to have to require our models
+  explicitly. It is probably good measure to do so, anyway, as we do in
+  this particular example.
+* Restart the server. Everything should still look the same, which means
+  everything is working.
+* You created your first data model!
+
+
+
+hello_world_v06
+===============
+* We're often going to want to include styling for our code, and we can
+  do so by including css assets.
+* Add the following file (note the name):
+
+    hello_world/mojits/getTime/assets/serverTime.css
+
+* Add add the CSS to the file as shown in the notes.
+* Open up our controller again:
+    
+    hello_world/mojits/getTime/controller.server.js
+
+  And make the code changes to include our CSS file.
+* Note: The addCSS method only works when there is a container frame on the
+  page (i.e. a full HTML page template where our mojits sit inside of).
+  addCSS will not arbitrarily work on a simple mojit that is not in a frame.
+* Test our changes. Our server date should now be styled.
+
+
+
+hello_world_v07
+===============
+* One way of adding client side interactions to our application is through
+  the binder interface, made available in mojito. This interactivity was
+  seen in the original version of our mojit when we were hitting the index
+  method and the mouseovers changed the class (and subsequently the style)
+  of our list.
+* Copy the following file:
+
+    hello_world/mojits/getTime/binders/index.js    
+  
+  to
+  
+    hello_world/mojits/getTime/binders/serverTime.js
+
+* Note the name of the file. When a binder file name matches the mojit action
+  name, the binder is automatically executed
+  BUT ONLY when the deploy setting is set to true in the application.json
+  file.
+* The binder code actually runs on the client side (web browser, in our case).
+* Make all of the changes to the serverTime.js file as noted in the notes.
+* Restart the server and test.
+
+
+
+hello_world_v08
+===============
+* The mojitProxy object that is part of the binder is an important management
+  tool for our client. We're going to use it to very simply update our
+  mojit with a new time.
+* Open up our binder again:
+
+    hello_world/mojits/getTime/binders/serverTime.js
+
+* Make the changes to the code as noted.
+* Also open up the controller again:
+
+    hello_world/mojits/controller.server.js
+
+* Make the simple change to the date type so that we can see the seconds
+  update on the client side.
+
+
+
+DEPLOY TO MANHATTAN
+===================
+* Time to deploy our application to Manhattan. Manhattan is a "cloud hosting"
+  solution provided by Yahoo! for development, testing, and production
+  hosting of web apps, in particular Node.js and Mojito.
+* The majority of the instructions are located in the file:
+
+    manhattan_dev_deployment.txt
+
+* Also note to people: the finished code is specifically not ready to deploy
+  to Manhattan because I wanted more obvious errors to show up rather than
+  the not-so-obvious error that would show up were I to correct the
+  package.json file so it was close to being deployable.
+

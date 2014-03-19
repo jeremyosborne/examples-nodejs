@@ -1,0 +1,13 @@
+/* Give a bit of white space within our parent.
+ * Height and width are governed by our parent.
+ */
+.mojit-container {
+    height: 100%;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.mojit-container .editor {
+    width: 100%;
+    height: 100%;
+}

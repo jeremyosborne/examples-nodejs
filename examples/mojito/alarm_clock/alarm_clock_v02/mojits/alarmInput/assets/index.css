@@ -1,0 +1,52 @@
+body, html {
+    padding: 0;
+    margin: 0;
+}
+
+header > h1 {
+    margin: 0;
+    padding: 1em;
+    background-color: #034769;
+    color: #63ADD0;
+    font-family: sans-serif;
+    text-align: right;
+}
+
+noscript div {
+    padding: 0.5em;
+    background-color: #A62300;
+    color: white;
+}
+
+form {
+    width: 60%;
+    min-width: 320px;
+    margin: 2em auto 2em auto;
+    padding: 1em;
+    border: 3px solid #034769;
+    box-shadow: 1px 1px 3px #63ADD0;
+    border-radius: 0.5em;
+}
+
+form label {
+    display: block;
+    font-size: 3em;
+}
+form input {
+    font-size: 2em;
+}
+form input[type="submit"] {
+    -webkit-appearance: none;
+
+    display: block;
+    width: 80%;
+    min-width: 260px;
+
+    margin: 0.3em auto;
+    border-radius: 0.5em;
+
+    background-color: #034769;
+    color: #63ADD0;
+    
+    font-size: 2em;
+}

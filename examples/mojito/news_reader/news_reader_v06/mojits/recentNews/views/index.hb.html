@@ -1,0 +1,26 @@
+<div id="{{mojit_view_id}}" class="recent-news-articles">
+    {{#if articles.length}}
+    <header>
+        <h1>There are {{articles.length}} top stories today.</h1>
+    </header>
+    <section class="article-container">
+        {{#each articles}}
+        <article>
+            <header>
+                <hgroup>
+                    <h1><a href="{{link}}" target="_blank">{{title}}</a></h1>
+                    <h2>{{formatDate pubDate}}, <a href="{{source.url}}">{{source.content}}</a></h2>
+                </hgroup>
+            </header>
+            <section>
+                {{&description}}
+            </section>
+        </article>
+        {{/each}}
+    </section>
+    {{else}}
+    <header>
+        <h1>No top stories today.</h1>
+    </header>
+    {{/if}}
+</div>

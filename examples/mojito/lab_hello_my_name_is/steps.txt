@@ -1,0 +1,29 @@
+HELLO MY NAME IS LAB
+====================
+* Your job is to create a "Hello My Name Is..." nametag that displays a
+  randomized name in the center of the page and then deploy your application
+  successfully to Manhattan.
+    * Generate an application called "lab_hello_my_name_is".
+    * Generate a single mojit called "myname".
+    * Correctly configure the application (application.json) to:
+        * Use the HTMLFrameMojit named as the "frame".
+        * Use the "myname" mojit as the child.
+        * Deploy everything to the client.
+    * Correctly configure HTTP requests made to the app (routes.json) to:
+        * Send any GET request of any path to the index of the "myname" mojit
+          via the "frame".
+    * Configure your "myname" mojit (in no particular order, and probably
+      good to just make use of as much of the scaffolding as already exists):
+        * Has a model that generates a random name.
+        * Has a correctly id'd template that displays a {{name}} with
+          a "Hi My Name Is" string above the {{name}}.
+        * Add some CSS style to your nametag to make it look like a nametag,
+          and include the styling through the controller.
+        * Has a controller that correctly passes the context object to
+          the actionContext so that it is displayed in the view.
+        * Has a binder that detects a mouseenter on the name tag and
+          adds an underline to the person's name, and on the mouseleave makes
+          the underline disappear. (PS. I know this is easy to do through
+          CSS :hover, but do it through the binder.)
+    * Test the application to make sure it works.
+    * Deploy the mojito application to manhattan. 

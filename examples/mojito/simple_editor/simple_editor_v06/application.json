@@ -1,0 +1,34 @@
+[
+    {
+        "settings": ["master"],
+        "mojitsDirs": ["mojits","node_modules/mojito-shaker/mojits"],
+        "specs": {
+            "frame": {
+                "type": "ShakerHTMLFrameMojit",
+                "config": {
+                    "deploy": true,
+                    "title": "Simple HTML Editor",                    
+                    "child": {
+                        "type": "container",
+                        "config": {
+                            "header": "the super simple editor",
+                            "children": {
+                                "htmlEditor": {
+                                    "type": "htmlEditor"
+                                },
+                                "htmlPreview": {
+                                    "type": "htmlPreview"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }, {
+        "settings": ["environment:development"],
+        "staticHandling": {
+            "forceUpdate": true
+        }
+    }
+]

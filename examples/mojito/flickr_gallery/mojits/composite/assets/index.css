@@ -1,0 +1,35 @@
+#header {
+    padding: 1em;
+    text-align: right;
+    background-color: #ee22ee;
+    color: #eee;
+    
+    box-shadow: 0 3px 4px #bbb, 0 2px 1px #aaa;
+}
+
+#main {
+    width: 90%;
+    margin: 1em auto;
+    overflow: auto;
+}
+
+.column {
+    width: 50%;
+    float: left;
+    padding: 0.3em;
+}
+
+#footer {
+    color: #888;
+    text-align: center;
+}
+
+@media only screen and (max-width: 768px) {
+    #main {
+        width: 95%;
+    }
+    .column {
+        width: 100%;
+        float: none;
+    }
+}

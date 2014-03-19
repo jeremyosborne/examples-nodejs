@@ -1,0 +1,18 @@
+<div id="{{mojit_view_id}}" class="mojit-page-container">
+    <header>
+        <h1>simple editor</h1>
+    </header>
+    {{!
+        The containers will allow us to modify the page layout with media 
+        queries.
+        
+        We are going to drop HTML into the page, so we need to un-escape the 
+        normal defanging process of handlebars (hence triplestache).
+    }}
+    <div class="mojit-layout-container">
+        {{{htmlEditor}}}
+    </div>
+    <div class="mojit-layout-container">
+        {{{htmlPreview}}}
+    </div>
+</div>

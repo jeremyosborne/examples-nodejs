@@ -1,0 +1,50 @@
+// !!!DO NOT SIMPLY CUT AND PASTE THIS FILE INTO YOUR CODE!!!
+// JSON files do not allow comments, so these comments will break your
+// app. Please delete this comment before using
+// AND
+// replace all bracketed tokens (e.g. <<<SOMETHING>>>) with info appropriate
+// to your app.
+// Notes about sections:
+//    * The sections outside of the yahoo object are standard NPM contents 
+//      that are used by both NPM and Manhattan.
+//    * We are changing a lot of the file to be more consistent with both
+//      Manhattan and NPM.
+//    * Even if you are never going to publish your code to a repository via
+//      (y)npm, it is a good practice to get comfortable with the package.json
+//      file. It can make your life as a developer much, much easier.
+// Notes about the bracketed tokens:
+//     <<<APP_NAME>>> replace with your application name. This must be unique
+//       across all of the dist system, hence why we name it this way for the
+//       class.
+//     <<<USERID>>> replace with your yahoo id to make sure your app
+//       has a unique id (because we must dist the app before deploying
+//       to Manhattan), and to fill in necessary contact info.
+//     <<<NAME>>> replace with your full name.
+{
+    "name": "mojito_class_<<<APP_NAME>>>_<<<USERID>>>",
+    "description": "Mojito Class Demonstration Application",
+    "version": "0.0.1",
+    "author": {
+        "name": "<<<NAME>>>",
+        "email": "<<<USERID>>>@yahoo-inc.com"
+    },
+    "yahoo": {
+        "bugzilla": {
+            "product" : "mojito-class-ignore",
+            "component" : "mojito-class-ignore"
+        },
+        "custodian": {
+            "email": "<<<USERID>>>@yahoo-inc.com",
+            "url": "http://dev.null.com"
+        }
+    },
+    "dependencies": {
+        "mojito": "0.5.6"
+    },
+    "engines": {
+        "node": "0.8.x"
+    },
+    "scripts": {
+        "start": "mojito start"
+    }
+}

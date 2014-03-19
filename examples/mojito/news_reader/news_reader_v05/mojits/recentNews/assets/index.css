@@ -1,0 +1,84 @@
+/* Assuming there is no page reset elsewhere... */
+body, html {
+    margin: 0;
+    padding: 0;
+    background-color: #ae9d2b;
+    font-family: Verdana, Helvetica, sans-serif;
+}
+/* Remove the underlines on all links. */
+a, a:link, a:visited, a:hover, a:active {
+    text-decoration: none;
+    color: #3c1e77;
+}
+
+/* Style the header of our mojito widget. */
+.recent-news-articles > header > h1 {
+    margin: 0;
+    background-color: #500063;
+    color: white;
+    text-align: right;
+    padding: 1em;
+    overflow: auto;
+}
+
+.recent-news-articles > .article-container {
+    width: 90%;
+    margin: 1em auto 0 auto;
+}
+
+.recent-news-articles > .article-container > article {
+    float: left;
+    height: 250px;
+    width: 29%;
+    margin: 1%;
+    overflow: auto;
+    background-color: white;
+    padding: 1%;
+}
+
+.recent-news-articles > .article-container > article > header h1 {
+    margin: 0 0 0.2em 0;
+    font-size: 1.2em;
+    text-align: center;
+}
+.recent-news-articles > .article-container > article > header h2 {
+    margin: 0 0 0.6em 0;
+    font-size: 0.8em;
+    color: #888;
+    padding-bottom: 0.2em;
+    border-bottom: 1px solid #ccc;
+}
+.recent-news-articles > .article-container > article > section {
+    overflow: auto;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+.recent-news-articles > .article-container > article > section p {
+    margin: 0;
+}
+/* Do our best to make the Yahoo! provided HTML content look better. */
+.recent-news-articles > .article-container > article > section a {
+    vertical-align: top;
+    float: left;
+    margin: 0 1em 1em 0;
+}
+
+
+/* Add a very simple responsive design that switches from 3 to 2 to 1 columns
+ * as we decrease our window size.
+ * NOTE: The HTMLFrameMojit template doesn't appear to inject a meta viewport
+ * tag, so these min and max widths are at the mercy of what the mobile
+ * browser reports its dimensions as.
+ */
+@media screen and (min-width:640px) and (max-width:1024px) {
+    /* Two columns. */
+    .recent-news-articles > .article-container > article {
+        width: 46%;
+    }
+}
+
+@media screen and (max-width:639px) {
+    /* One column. */
+    .recent-news-articles > .article-container > article {
+        width: 96%;
+    }
+}

@@ -1,0 +1,19 @@
+<div id="{{mojit_view_id}}" class="gallery">
+    {{#if err}}
+    <h2>Sorry, the query for "{{query}}" generated an error: {{err}}</h2>
+    {{else}}
+        {{#if photos}}
+    <h2>Showing {{photos.length}} photos for query "{{query}}"</h2>
+    <ul>
+            {{#each photos}}
+        <li><img 
+            src="http://farm{{farm}}.staticflickr.com/{{server}}/{{id}}_{{secret}}_s.jpg"
+            data-photo_id="{{id}}"
+            width="75" height="75"/></li>
+            {{/each}}
+    </ul>
+        {{else}}
+    <h2>Sorry, there were no photos for the query "{{query}}".</h2>
+        {{/if}}
+    {{/if}}
+</div>

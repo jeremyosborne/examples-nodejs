@@ -1,0 +1,10 @@
+[
+    {
+        "settings": ["master"],
+        "flickr_gallery entrypoint": {
+            "verbs": ["get"],
+            "path": "/(index\\.htm[l]?|)",
+            "call": "frame.index"
+        }
+    }
+]

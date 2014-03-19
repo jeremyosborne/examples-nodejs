@@ -1,0 +1,353 @@
+NEWS READER - WALKTHROUGH
+=========================
+* Exercise designed and tested with:
+    * mojito 0.5.6
+        * previous versions were tested with mojito 0.4.2, 0.4.3, 0.4.5
+    * nodejs 0.6.6 and 0.8.8
+* Overview instructions are found in this file.
+* Each step of the application is given a trailing version number and
+  a new folder.
+* Obvious comments are used to denote where code is added, changed, or 
+  removed, EXCEPT in json files that do not allow comments (pay attention to 
+  the notes in this file for JSON file changes).
+
+
+
+news_reader_v01
+===============
+* Use the mojito commandline tools to create our starting application:
+
+        $ mojito create app news_reader
+        $ cd news_reader
+        $ mojito create mojit recentNews
+
+* Open the file:
+    
+    news_reader/application.json
+
+  and fix it as follows:
+
+[
+    {
+        "settings": ["master"],
+        "specs": {
+            "frame": {
+                "type": "HTMLFrameMojit",
+                "config": {
+                    "title": "News Reader",
+                    "deploy": true,
+                    "child": {
+                        "type": "recentNews"
+                    }
+                }
+            }
+        }
+    }, {
+        "settings": ["environment:development"],
+        "staticHandling": {
+            "forceUpdate": true
+        }
+    }
+] 
+
+* Open the file:
+    
+    news_reader/routes.json
+
+  and place the following contents into this file:
+
+[
+    {
+        "settings": ["master"],
+        "newsReader entrypoint": {
+            "verbs": ["get"],
+            "path": "/",
+            "call": "frame.index"
+        }
+    }
+]
+
+* Start the mojito server and test at our regular URL:
+    
+    http://localhost:8666/
+
+* We should see the default display that we saw in our previous example. This
+  is what we want. A good sign that things are working is that the default
+  binders work (mouse over the dt tags and see the yellow highlight on the dd
+  tags).
+
+
+
+news_reader_v02
+===============
+* For the news reader application, we need a more robust model that can
+  retrieve news stories for us from a remote source and put the stories into
+  a format that our application will understand.
+
+* Copy the file:
+
+    news_reader/mojits/recentNews/models/foo.server.js
+
+  to:    
+  
+    news_reader/mojits/recentNews/models/articles.server.js
+
+* Open the file:
+
+    news_reader/mojits/recentNews/models/articles.server.js
+
+  and make the noted changes to the file.
+
+* Open the file:
+
+    news_reader/mojits/recentNews/controller.server.js
+  
+  and make the noted changes to the file.
+
+* Start the mojito server and test at our regular URL:
+    
+    http://localhost:8666/
+
+  but watch the console log of the server when we make a request to the page.
+  The server output should show a large JSON data model when we make visit the
+  web page at the URL above. This is what we want to see and it shows that
+  our model is working.
+
+
+
+news_reader_v03
+===============
+* The data to be displayed for the recentNews mojit is more robust, and more
+  reminiscent of real life data structres that will need to be viewed on an
+  HTML page.
+
+* First, let's make the data available to the template by opening:
+
+    news_reader/mojits/recentNews/controller.server.js
+    
+  and make the changes found in the file.
+
+* Let's modify the existing template file at:
+
+    news_reader/mojits/recentNews/views/index.hb.html
+  
+  to use the new data structure.
+
+* Fire up mojito and view the awesomeness of our HTML output.
+
+
+
+news_reader_v04
+===============
+* Sometimes we want to modify our data output to a template. We can do so
+  with a handlebars helper function.
+
+* Open up the following files:
+
+    news_reader/mojits/recentNews/controller.server.js
+
+  and
+
+    news_reader/mojits/recentNews/views/controller.server.js  
+
+  and make the changes.
+
+
+
+news_reader_v05
+===============
+* Time to style our application.
+* Open up the file:
+
+    news_reader/mojits/recentNews/assets/index.css
+
+* Make the changes found in the notes version of this file. We're making a
+  very simple responsive layout that goes from 3 to 2 to 1 column as we
+  shrink our display area.
+* NOTE: It appears that changing static files like this do not require a
+  server restart. We can make changes and test along the way as long as the
+  server is running.
+
+
+
+news_reader_v06
+===============
+* We want to include multiple mojits in this application, but to do so, we
+  need to reconfigure some stuff. First, we need to build ourselves a
+  composite mojit.
+* Open up the following file:
+
+    news_reader/application.json
+  
+* Make the changes found below. The changes are to the "child" configuration
+  of our HTMLFrameMojit (shown in diff format).
+  
+                      "child": {
+-                        "type": "recentNews"
++                        "type": "newsContainer",
++                        "config": {
++                            "children": {
++                                "recentNews": {
++                                    "type": "recentNews"
++                                }                    
++                            }
++                        }
+                     }
+
+* Time to create the container mojit:
+
+    mojito create mojit newsContainer
+
+* Open up:
+    
+    news_reader/mojits/newsContainer/controller.server.js
+
+  and change the index function to match.
+
+* Open up:
+
+    news_reader/mojits/newsContainer/index.hb.html
+ 
+  and change the template to match.
+
+* Test and make sure everything works. The page should look just like it
+  did before if all is working.
+
+
+
+news_reader_v07
+===============
+* Let's create a newStories mojit that will let us know when there are new
+  stories to read.
+* Open up:
+
+    news_reader/application.json
+
+* Make the changes found below. Note: we will make the corresponding mojit
+  in the next step. The changes are to the newsContainer configuration (shown
+  below in diff format).
+            "type": "newsContainer",
+            "config": {
+                "children": {
++                   "newStories": {
++                       "type": "newStories"
++                   },
+                    "recentNews": {
+                        "type": "recentNews"
+                    }
+                }
+            }
+
+* Open up:
+
+    news_reader/mojits/newsContainer/index.hb.html
+ 
+  and change the template to match.
+
+* Time to create the newStories mojit:
+
+    mojito create mojit newStories
+
+* Open:
+    
+    news_reader/mojits/newsStories/views/index.hb.html
+
+  and make the changes to the file.
+
+* Open:
+
+    news_reader/mojits/newsStories/assets/index.css
+    
+  and make the changes to the file.
+
+* Open:
+
+    news_reader/mojits/newsStories/controller.server.js
+    
+  and make the changes to the file.
+
+* Test. When we rerun the application, we should have a notification
+  across the top of the bar. This is what we want. In the next example
+  we'll make the notification only appear when/if there are stories
+  that occur after the most recent story.
+
+
+
+news_reader_v08
+===============
+* Time to put our notification to use. Step #1: hide the notification
+  before it is needed.
+
+* Open up
+
+    news_reader/mojits/newsStories/assets/index.css
+    
+  and add display:none to the notification.
+
+* Test to make sure the display is hidden before moving on.
+
+* Copy:
+
+    news_reader/mojits/newsStories/models/foo.server.js
+    
+  to:
+  
+    news_reader/mojits/newsStories/models/latestStory.server.js
+
+  and make the changes to the file.
+  
+* Open up:
+
+    news_reader/mojits/newsStories/controller.server.js
+    
+  and add the new action as defined.
+
+* Open up:
+
+    news_reader/application.json
+    
+  and make the following changes (using diff notation):
+  
+[
+    {
+        "settings": ["master"],
++       "specs": {
++           "latestStory": {
++               "type": "newStories"
++           },
+            "frame": {
+
+* Open up:
+
+    news_reader/routes.json
+    
+  and add the following changes (using diff notation):
+  
+[
+    {
+        "settings": ["master"],
+        "newsReader entrypoint": {
+            "verbs": ["get"],
+            "path": "/",
+            "call": "frame.index"
+!       },
++       "latestStory API": {
++           "verbs": ["get"],
++           "path": "/latestStory",
++           "call": "latestStory.latestStory"
++       }
+    }
+]
+
+* Test out everything and make sure it works at:
+
+    http://localhost:8666/latestStory
+
+* Open up:
+
+    news_reader/mojits/newsStories/binders/index.js
+    
+  and make the changes annotated in the file.
+
+* Fire up mojito, cross fingers, and test.
+
