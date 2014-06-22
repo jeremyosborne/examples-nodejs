@@ -64,13 +64,15 @@ var modelDefine = function(args, done) {
             autoIncrement: true,
             primaryKey: true
         },
-        username: {
+        // username
+        email: {
             type: Sequelize.STRING,
         },
         salt: {
             type: Sequelize.STRING,
         },
-        hash: {
+        // will be hashed
+        password: {
             type: Sequelize.STRING,
         },
     });

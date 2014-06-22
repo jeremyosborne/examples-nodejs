@@ -31,27 +31,6 @@ app.use(methodOverride());
 
 var LocalStrategy = require('passport-local').Strategy;
 var hash = require("./pass").hash;
-passport.use(new LocalStrategy(function (username, password, next) {
-    var User = require("./user").model;
-    User.find({ username : username }, function(err, user){
-        if (err) {
-            next(err);
-        } else if (!user) {
-            next(null, false, { message: 'Incorrect username.' });
-        } else {
-            hash(password, user.salt, function (err, hashed_password) {
-                if (err) {
-                    next(err);
-                } else if (hashed_password == user.hash) {
-                    next(null, user);
-                } else {
-                    next(null, false, { message: 'Incorrect password.' });
-                }
-            });
-        }
-    });
-}));
-
 passport.serializeUser(function(user, next) {
     next(null, user.id);
 });
@@ -61,8 +40,62 @@ passport.deserializeUser(function(id, done) {
         done(null,user);
     });
 });
+passport.use('local-login', new LocalStrategy(function (username, password, next) {
+    var User = require("./user").model;
+    User.find({ email : username }, function(err, user){
+        if (err) {
+            next(err);
+        } else if (!user) {
+            next(null, false, { message: 'Incorrect username.' });
+        } else {
+            hash(password, user.salt, function (err, hashed_password) {
+                if (err) {
+                    next(err);
+                } else if (hashed_password == user.password) {
+                    next(null, user);
+                } else {
+                    next(null, false, { message: 'Incorrect password.' });
+                }
+            });
+        }
+    });
+}));
+passport.use('local-signup', new LocalStrategy({
+    passReqToCallback : true // allows us to pass back the entire request to the callback
+}, function(req, username, password, next) {
+    var User = require("./user").model;
+    User.find({ email :  username }, function(err, user) {
+        if (err) {
+            next(err);
+        } else if (user) {
+            next(null, false);
+        } else {
+            var u = new User();
+            u.email = username;
+            hash(password, function(err, salt, hashed_password) {
+                if (err) {
+                    next(err);
+                }
+                else {
+                    u.salt = salt;
+                    u.password = hashed_password;
+                    u.save(function(err) {
+                        next(err, u);
+                    });
+                }
+            });
+        }
+    });
+}));
 
 
+
+
+// Routes
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/fail.html',
+}));
 app.use(express.static(__dirname + '/public'));
 
 
