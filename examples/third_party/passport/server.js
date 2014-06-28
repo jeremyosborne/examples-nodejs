@@ -34,65 +34,82 @@ var hash = require("./pass").hash;
 passport.serializeUser(function(user, next) {
     next(null, user.id);
 });
-passport.deserializeUser(function(id, done) {
+passport.deserializeUser(function(id, next) {
     var User = require("./user").model;
-    User.find(id, function(err, user) {
-        done(null,user);
-    });
+    console.log(id);
+    User.find(id)
+        .success(function(user) {
+            next(null, user);
+        })
+        .fail(function(err) {
+            next(err);
+        });
 });
 passport.use('local-login', new LocalStrategy(function (username, password, next) {
     var User = require("./user").model;
-    User.find({ email : username }, function(err, user){
-        if (err) {
+    User.find({ email : username })
+        .success(function(user) {
+            if (!user) {
+                next(null, false, { message: 'Incorrect username.' });
+            } else {
+                hash(password, user.salt, function (err, hashed_password) {
+                    if (err) {
+                        next(err);
+                    } else if (hashed_password == user.password) {
+                        next(null, user);
+                    } else {
+                        next(null, false, { message: 'Incorrect password.' });
+                    }
+                });
+            }
+        })
+        .fail(function(err) {
             next(err);
-        } else if (!user) {
-            next(null, false, { message: 'Incorrect username.' });
-        } else {
-            hash(password, user.salt, function (err, hashed_password) {
-                if (err) {
-                    next(err);
-                } else if (hashed_password == user.password) {
-                    next(null, user);
-                } else {
-                    next(null, false, { message: 'Incorrect password.' });
-                }
-            });
-        }
-    });
+        });
 }));
-passport.use('local-signup', new LocalStrategy({
+passport.use('local-register', new LocalStrategy({
     passReqToCallback : true // allows us to pass back the entire request to the callback
 }, function(req, username, password, next) {
     var User = require("./user").model;
-    User.find({ email :  username }, function(err, user) {
-        if (err) {
+    User.findOrCreate({ email:  username })
+        .success(function(user, created) {
+            if (!created) {
+                next(null, false);
+            } else {
+                // User is new, create has their password.
+                hash(password, function(err, salt, hashed_password) {
+                    if (err) {
+                        next(err);
+                    }
+                    else {
+                        user.salt = salt;
+                        user.password = hashed_password.toString('base64');
+                        user.save()
+                            .success(function() {
+                                // Good.. finally.
+                                next(null, user);
+                            })
+                            .fail(function(err) {
+                                next(err);
+                            });
+                    }
+                });
+            }
+        })
+        .fail(function(err) {
             next(err);
-        } else if (user) {
-            next(null, false);
-        } else {
-            var u = new User();
-            u.email = username;
-            hash(password, function(err, salt, hashed_password) {
-                if (err) {
-                    next(err);
-                }
-                else {
-                    u.salt = salt;
-                    u.password = hashed_password;
-                    u.save(function(err) {
-                        next(err, u);
-                    });
-                }
-            });
-        }
-    });
+        });
 }));
 
 
 
 
 // Routes
-app.post('/login', passport.authenticate('local', {
+app.post('/login', passport.authenticate('local-login', {
+    successRedirect: '/',
+    failureRedirect: '/fail.html',
+}));
+app.post('/register', passport.authenticate('local-register', {
     successRedirect: '/',
     failureRedirect: '/fail.html',
 }));
