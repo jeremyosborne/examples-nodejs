@@ -37,7 +37,6 @@ passport.serializeUser(function(user, next) {
 });
 passport.deserializeUser(function(id, next) {
     var User = require("./user").model;
-    console.log(id);
     User.find(id)
         .success(function(user) {
             next(null, user);
