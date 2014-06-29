@@ -1,5 +1,6 @@
 /* jshint undef:true, node:true */
 
+var path = require("path");
 var logger = require("winston");
 var async = require("async");
 var express = require('express');
@@ -55,7 +56,7 @@ passport.use('local-login', new LocalStrategy(function (username, password, next
                 hash(password, user.salt, function (err, hashed_password) {
                     if (err) {
                         next(err);
-                    } else if (hashed_password == user.password) {
+                    } else if (hashed_password.toString('base64') == user.password) {
                         next(null, user);
                     } else {
                         next(null, false, { message: 'Incorrect password.' });
@@ -103,17 +104,26 @@ passport.use('local-register', new LocalStrategy({
 
 
 
+var isUserLoggedIn = function(req, res, next) {
+	if (req.isAuthenticated()) {
+		next();
+    } else {
+       res.redirect('/');
+    }
+};
 
 // Routes
 app.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/',
+    successRedirect: '/protected',
     failureRedirect: '/fail.html',
 }));
 app.post('/register', passport.authenticate('local-register', {
-    successRedirect: '/',
+    successRedirect: '/protected',
     failureRedirect: '/fail.html',
 }));
-app.use(express.static(__dirname + '/public'));
+app.use("/protected", isUserLoggedIn);
+app.use("/protected", express.static(path.resolve(__dirname + '/protected')));
+app.use(express.static(path.resolve(__dirname + '/public')));
 
 
 
