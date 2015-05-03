@@ -1,0 +1,30 @@
+{
+    "name": "technicolor",
+    "description": "String ANSI colorizer, assumed for console.log() output.",
+    "version": "0.0.1",
+    "keywords": [
+        "color", 
+        "server"
+    ],
+    "author": {
+        "name": "Jeremy Osborne",
+        "email": "jeremywosborne@gmail.com",
+        "url": "http://jeremyosborne.com/"
+    },
+    "main": "technicolor.js",
+    "engines": {
+        "node": ">= 0.6.x"
+    },
+    "dependencies": {
+    },
+    "devDependencies": {
+    },
+    "licenses": [
+        {
+            "type": "MIT"
+        }
+    ],
+    "scripts": {
+        "test": "node test/technicolor"
+    }
+}
