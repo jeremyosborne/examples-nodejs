@@ -28,7 +28,7 @@ if (!url) {
     console.error("\thtml-to-markdown -v [--xform=some-style] <url>\n");
     console.error("-v");
     console.error("\tverbose mode. non-content comments to stderr (content only ever to stdout)");
-    console.error("\n--style");
+    console.error("\n--xform");
     console.error("\tnone (default)");
     console.error("\twikipedia");
     console.error("\n");
