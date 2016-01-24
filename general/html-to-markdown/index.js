@@ -5,6 +5,7 @@ try {
     var request = require("request");
     var toMarkdown = require("to-markdown").toMarkdown;
     var argv = require("minimist")(process.argv.slice(2));
+    var meta = require("./package.json");
 } catch (e) {
     console.error("Make sure to `npm install` before running this code.");
     console.error("Here's the error that happened during module import:", e, "\n\n");
@@ -15,13 +16,14 @@ try {
 var verboseFlag = argv.v;
 var verbose = function() {
     if (verboseFlag) {
-        console.error.apply(console, arguments);        
+        console.error.apply(console, arguments);
     }
 };
 
 
 var url = argv._[0];
 if (!url) {
+    console.error("%s %s", meta.name, meta.version);
     console.error("\nUsage:\n");
     console.error("\thtml-to-markdown -v [--xform=some-style] <url>\n");
     console.error("-v");
